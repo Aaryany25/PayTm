@@ -3,6 +3,7 @@
 import express from "express"
 import dotenv from "dotenv"
 import connectDB from "./db/db.js"
+import { Router } from "./routes/index.js"
 dotenv.config()
 const app = express()
 
@@ -15,6 +16,5 @@ app.listen(3000,()=>{
     console.log("mongoDb Connection failed",error)
 
 })
-app.get("/",(req,res)=>{
-    res.json("message We are live")
-})
+
+app.use("/api/v1",Router)
