@@ -2,7 +2,8 @@ import jwt from "jsonwebtoken"
 export function AuthMiddleware(req,res,next){
     const autHeader = req.headers.authorization
 
-    if(!autHeader|| !autHeader.startsWith("Bearer")){
+    if(!autHeader || !autHeader.startsWith("Bearer ")){
+        console.log("AuthMiddleware hit")
         return res.status(403).json({
             message:"You are not logged in"
         })

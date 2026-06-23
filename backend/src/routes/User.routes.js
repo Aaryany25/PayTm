@@ -3,6 +3,7 @@ import {z} from "zod"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { User } from "../models/User.Model.js"
+import { AuthMiddleware } from "../middleware.js"
  const  UserRouter = express.Router()
 
 
@@ -90,6 +91,34 @@ UserRouter.post("/signin",async(req,res)=>{
         })
     }
 })
+UserRouter.get("/me",AuthMiddleware,async(req,res)=>{
+    const user = await User.findOne({
+        _id:req.userId
+    })
+    return res.json({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.username
+    })
+})
 
-
+const UpdateBody = z.object({
+    password:z.string().optional(),
+    firstName:z.string().optional(),
+    lastName:z.string().optional()
+})
+UserRouter.put("/update",AuthMiddleware,async(req,res)=>{
+    
+         const {success} = UpdateBody.safeParse(req.body)
+         if(!success){
+            return   res.status(411).json({
+            message: "Error while updating information"
+          
+        })
+         }
+         	await User.updateOne({ _id: req.userId }, req.body);
+              res.json({
+        message: "Updated successfully"
+    })
+})
 export default UserRouter
