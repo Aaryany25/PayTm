@@ -121,4 +121,29 @@ UserRouter.put("/update",AuthMiddleware,async(req,res)=>{
         message: "Updated successfully"
     })
 })
+
+UserRouter.get("/bulk",async(req,res)=>{
+    const filter = req.query.filter || "";
+     const users = await User.find({
+        $or: [{
+            firstName: {
+                "$regex": filter,
+                "$option":"i"
+            }
+        }, {
+            lastName: {
+                "$regex": filter,
+                "$option":"i"
+            }
+        }]
+    })
+     res.json({
+        user: users.map(user => ({
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            _id: user._id
+        }))
+    })
+})
 export default UserRouter
