@@ -123,27 +123,34 @@ UserRouter.put("/update",AuthMiddleware,async(req,res)=>{
 })
 
 UserRouter.get("/bulk",async(req,res)=>{
-    const filter = req.query.filter || "";
-     const users = await User.find({
-        $or: [{
-            firstName: {
-                "$regex": filter,
-                "$option":"i"
-            }
-        }, {
-            lastName: {
-                "$regex": filter,
-                "$option":"i"
-            }
-        }]
-    })
-     res.json({
-        user: users.map(user => ({
-            username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            _id: user._id
-        }))
-    })
+    try {
+        const filter = req.query.filter || "";
+        const users = await User.find({
+            $or: [{
+                firstName: {
+                    "$regex": filter,
+                    "$options":"i"
+                }
+            }, {
+                lastName: {
+                    "$regex": filter,
+                    "$options":"i"
+                }
+            }]
+        })
+        return res.json({
+            user: users.map(user => ({
+                username: user.username,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                _id: user._id
+            }))
+        })
+    } catch (error) {
+        console.error("Bulk search error:", error);
+        return res.status(500).json({
+            message: "Internal server error"
+        })
+    }
 })
 export default UserRouter
