@@ -7,8 +7,10 @@ import { Router } from "./routes/index.js"
 import cors from "cors"
 dotenv.config()
 const app = express()
-app.use(cors)
+app.use(cors())
 app.use(express.json())
+
+app.use("/api/v1",Router)
 
 // Connecting To DB 
 connectDB().then(()=>{
@@ -20,5 +22,3 @@ app.listen(3000,()=>{
     console.log("mongoDb Connection failed",error)
 
 })
-
-app.use("/api/v1",Router)
