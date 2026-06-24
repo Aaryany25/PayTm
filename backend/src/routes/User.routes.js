@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { User } from "../models/User.Model.js"
 import { AuthMiddleware } from "../middleware.js"
+import {Account } from "../models/Account.Model.js"
  const  UserRouter = express.Router()
 
 
@@ -38,6 +39,10 @@ UserRouter.post("/signup",async(req,res)=>{
             lastName: req.body.lastName,
         })
         const userId = user._id
+          await Account.create({
+        userId,
+        balance: 1 + Math.random() * 10000
+    })
         const token =jwt.sign({
             userId
         },process.env.JWT_SECRET)
