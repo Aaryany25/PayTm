@@ -19,12 +19,10 @@ function Users() {
 
   return (
     <>
-    
-    <div>Users</div>
      <input onChange={(e) => {
                 setFilter(e.target.value)
-            }} type="text" placeholder="Search users..." className="w-full px-2 py-1 border rounded border-slate-200"></input>
-      <div>
+            }} type="text" placeholder="Search users..." className="w-full px-2 py-1 border rounded border-slate-200 mt-5"></input>
+      <div className='mt-5'>
             {users.map(user => <User user={user} />)}
         </div>
     </>
