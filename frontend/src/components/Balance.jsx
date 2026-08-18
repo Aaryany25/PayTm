@@ -6,7 +6,7 @@ function Balance({value}) {
             Your balance
         </div>
         <div className="font-semibold ml-4 text-xl">
-            Rs {value}
+            $ {value}
         </div>
     </div>
 }
